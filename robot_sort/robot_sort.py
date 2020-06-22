@@ -81,11 +81,13 @@ class SortingRobot:
         Turn on the robot's light
         """
         self._light = "ON"
+
     def set_light_off(self):
         """
         Turn off the robot's light
         """
         self._light = "OFF"
+
     def light_is_on(self):
         """
         Returns True if the robot's light is on and False otherwise.
@@ -98,17 +100,48 @@ class SortingRobot:
         """
         # Fill this out
         # the robot needs to be working first
-        self.set_light_on
-        while self.light_is_on():
-            # the robot needs to move right through the list
-            while self.can_move_right():
+        self.set_light_on()
+        while self.light_is_on():  # True
+            # start at the beginning of the list
+            # which means that the robot can move right
+            # robot should pick up the first element and compare it to the next element
+            # if i > i + 1, robot should swap
+            # if i < i + 1, no swap should occur. Robot should move to the next item
+            if self.compare_item() == None:
+                self.swap_item()
+
+            while self.can_move_right() == True:
                 self.move_right()
+                if self.compare_item() == -1 and self.can_move_right() == True:
+                    self.swap_item()
+
+                elif self.can_move_right() == False and self.compare_item() == 1:
+                    self.swap_item()
+
+
+            if self.can_move_right() is not True and self.compare_item() is None:
+                self.set_light_off()
+
+            while self.can_move_left() == True:
+                self.move_left()
+
                 if self.compare_item() == 1:
                     self.swap_item()
-            if self.compare_item() is None:
-                self.set_light_off()
-                break
 
+                elif self.compare_item() == None and self.can_move_right() == True:
+                    self.swap_item()
+                    self.move_right()
+
+                    if self.can_move_right() == False and self.compare_item() == None:
+                        self.set_light_off()
+
+                    break
+
+                elif self.compare_item() == None and self.can_move_right() == False:
+                    self.set_light_off()
+                    break
+                
+                    
 if __name__ == "__main__":
     # Test our your implementation from the command line
     # with `python robot_sort.py`
